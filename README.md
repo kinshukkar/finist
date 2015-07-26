@@ -19,7 +19,8 @@ Related projects
 ----------------
 
 * [Finist implemented in Lua][finist.lua]
-* [Finist implemented in Rust][finist.rust]
+* [Finist implemented in Ruby][finist.lua]
+* [Finist implemented in Rust][finist.ruby]
 
 Getting started
 ---------------
@@ -39,14 +40,16 @@ Finist requires a [Redic][redic] compatible client. To make things
 easier, `redic` is listed as a runtime dependency so the examples
 in this document will work.
 
-```ruby
-require "finist"
+```python
+from finist import Finist
+import redis
+redis_conn = redis.Redis()
 
 # Initialize with a Redis client, the name of the machine and the
 # initial state. In this example, the machine is called "order" and
 # the initial status is "pending". The Redis client is connected to
 # the default host (127.0.0.1:6379).
-machine = Finist.new(Redic.new, "order", "pending")
+machine = Finist(redis_conn, "order", "pending")
 
 # Available transitions are defined with the `on` method
 # `machine.on(<event>, <initial_state>, <final_state>)`
@@ -59,14 +62,14 @@ machine.on("reset", "cancelled", "pending")
 Now that the possible transitions are defined, we can check the
 current state:
 
-```ruby
-machine.state
+```python
+machine.state()
 # => "pending"
 ```
 
 And we can trigger an event:
 
-```ruby
+```python
 machine.trigger("approve")
 # => ["approved", true]
 ```
@@ -77,25 +80,24 @@ a transition occurred.
 
 Here's what happens if an event doesn't cause a transition:
 
-```ruby
+```python
 machine.trigger("reset")
 # => ["approved", false]
 ```
 
 Here's a convenient way to use this flag:
 
-```ruby
+```python
 state, changed = machine.trigger("reset")
 
 if changed
-  printf("State changed to %s\n", state)
-end
+  print "State changed to %s\n" %state
 ```
 
 If you need to remove all the transitions for a given event, you
 can use `rm`:
 
-```ruby
+```python
 machine.rm("reset")
 ```
 
@@ -132,10 +134,13 @@ Installation
 ------------
 
 ```
-$ gem install finist
+$ python setup.py install
+or 
+$ pip install finist
 ```
 
 [redis]: http://redis.io
-[redic]: https://github.com/amakawa/redic
+[Python Redis]: https://github.com/andymccurdy/redis-py
 [finist.lua]: https://github.com/soveran/finist.lua
 [finist.rust]: https://github.com/badboy/finist
+[finist.ruby]: https://github.com/soveran/finist
