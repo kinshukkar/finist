@@ -36,7 +36,7 @@ file that comes with the sources if you want to change some settings.
 Usage
 -----
 
-Finist requires a [Redic][redic] compatible client. To make things
+Finist requires a Redis [Python Redis] compatible client. To make things
 easier, `redic` is listed as a runtime dependency so the examples
 in this document will work.
 
