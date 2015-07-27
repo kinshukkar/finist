@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class Finist:
+class Finist(object):
     _SCRIPT = """local curr = redis.call("GET", KEYS[1])
                 local next = redis.call("HGET", KEYS[2], curr)
                 if next then
@@ -17,7 +17,7 @@ class Finist:
         self.redis = redis
         self.redis.setnx(self._name, initializer)
 
-    def event_key(self, ev):
+    def _event_key(self, ev):
         return "%s:%s" % (self._name, ev)
 
     def on(self, ev, curr_state, next_state):
@@ -29,7 +29,7 @@ class Finist:
     def state(self):
         return self.redis.get(self._name)
 
-    def send_event(self, ev):
+    def _send_event(self, ev):
         return self.redis.eval(self._SCRIPT, "2", self._name,
                                self.event_key(ev))
 
