@@ -21,18 +21,18 @@ class Finist(object):
         return "%s:%s" % (self._name, ev)
 
     def on(self, ev, curr_state, next_state):
-        return self.redis.hset(self.event_key(ev), curr_state, next_state)
+        return self.redis.hset(self._event_key(ev), curr_state, next_state)
 
     def rm(self, ev):
-        return self.redis.delete(self.event_key(ev))
+        return self.redis.delete(self._event_key(ev))
 
     def state(self):
         return self.redis.get(self._name)
 
     def _send_event(self, ev):
         return self.redis.eval(self._SCRIPT, "2", self._name,
-                               self.event_key(ev))
+                               self._event_key(ev))
 
     def trigger(self, ev):
-        result = self.send_event(ev)
+        result = self._send_event(ev)
         return result[0], result[1] != None
