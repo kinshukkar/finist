@@ -2,13 +2,11 @@
 
 
 class Finist(object):
-    _SCRIPT = """local curr = redis.call("GET", KEYS[1])
-                local next = redis.call("HGET", KEYS[2], curr)
+    _SCRIPT = """local next = redis.call("HGET", KEYS[2], KEYS[3])
                 if next then
-                  redis.call("SET", KEYS[1], next)
                   return { next, true }
                 else
-                  return { curr, false }
+                  return { KEYS[3], false }
                 end
                 """
 
@@ -29,10 +27,10 @@ class Finist(object):
     def state(self):
         return self.redis.get(self._name)
 
-    def _send_event(self, ev):
+    def _send_event(self, ev, state):
         return self.redis.eval(self._SCRIPT, "2", self._name,
-                               self._event_key(ev))
+                               self._event_key(ev), state)
 
-    def trigger(self, ev):
+    def trigger(self, ev, state):
         result = self._send_event(ev)
         return result[0], result[1] != None
