@@ -32,5 +32,5 @@ class Finist(object):
                                self._event_key(ev), state)
 
     def trigger(self, ev, state):
-        result = self._send_event(ev)
+        result = self._send_event(ev, state)
         return result[0], result[1] != None
