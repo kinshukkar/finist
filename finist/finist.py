@@ -28,7 +28,7 @@ class Finist(object):
         return self.redis.get(self._name)
 
     def _send_event(self, ev, state):
-        return self.redis.eval(self._SCRIPT, "2", self._name,
+        return self.redis.eval(self._SCRIPT, "3", self._name,
                                self._event_key(ev), state)
 
     def trigger(self, ev, state):
