@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 from codecs import open
 
 def readme():
-    with open('README.rst') as f:
-        return f.read()
+    #with open('README.rst') as f:
+    return 'Description'
 # Get the long description from the relevant file
 
 
